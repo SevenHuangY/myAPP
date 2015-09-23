@@ -94,13 +94,18 @@ public class voiceButton extends Button
 
 	private void dialogShow()
 	{
-		// TODO Auto-generated method stub
-	
+		// TODO Auto-generated method stub	
+//		LayoutInflater layout = LayoutInflater.from(context);
+//		View view = layout.inflate(R.layout.dialog_layout, null);
+//		noticeDialog = new AlertDialog.Builder(context, R.style.dialog).setView(view).create();
+//		noticeDialog.show();
+		noticeDialog = new Dialog(context, R.style.dialog);
 		LayoutInflater layout = LayoutInflater.from(context);
 		View view = layout.inflate(R.layout.dialog_layout, null);
-		noticeDialog = new AlertDialog.Builder(context).setView(view).create();
-//		noticeDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+		noticeDialog.setContentView(view);
+				
 		noticeDialog.show();
+	
 	}
 
 	private void judgeStatus(int x, int y)

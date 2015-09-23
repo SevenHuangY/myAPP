@@ -22,27 +22,31 @@ public final class R {
     }
     public static final class drawable {
         public static final int adj=0x7f020000;
-        public static final int cancel=0x7f020001;
-        public static final int chatto_bg_focused=0x7f020002;
-        public static final int dialog_loading_bg=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int icon=0x7f020005;
-        public static final int recorder=0x7f020006;
-        public static final int v1=0x7f020007;
-        public static final int v2=0x7f020008;
-        public static final int v3=0x7f020009;
-        public static final int v4=0x7f02000a;
-        public static final int v5=0x7f02000b;
-        public static final int v6=0x7f02000c;
-        public static final int v7=0x7f02000d;
-        public static final int v_anim1=0x7f02000e;
-        public static final int v_anim2=0x7f02000f;
-        public static final int v_anim3=0x7f020010;
-        public static final int voice_to_short=0x7f020011;
+        public static final int buttonshape=0x7f020001;
+        public static final int cancel=0x7f020002;
+        public static final int chatto_bg_focused=0x7f020003;
+        public static final int dialog_loading_bg=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int icon=0x7f020006;
+        public static final int recorder=0x7f020007;
+        public static final int v1=0x7f020008;
+        public static final int v2=0x7f020009;
+        public static final int v3=0x7f02000a;
+        public static final int v4=0x7f02000b;
+        public static final int v5=0x7f02000c;
+        public static final int v6=0x7f02000d;
+        public static final int v7=0x7f02000e;
+        public static final int v_anim1=0x7f02000f;
+        public static final int v_anim2=0x7f020010;
+        public static final int v_anim3=0x7f020011;
+        public static final int voice_to_short=0x7f020012;
     }
     public static final class id {
-        public static final int action_settings=0x7f080001;
+        public static final int action_settings=0x7f080004;
         public static final int chatListView=0x7f080000;
+        public static final int dialog_left_img=0x7f080001;
+        public static final int dialog_right_img=0x7f080002;
+        public static final int dialog_text=0x7f080003;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -84,5 +88,6 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f060001;
+        public static final int dialog=0x7f060002;
     }
 }
