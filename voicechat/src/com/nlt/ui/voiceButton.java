@@ -1,42 +1,29 @@
 package com.nlt.ui;
 
 
-import com.nlt.voicechat.R;
+import com.nlt.audio.audioManager;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
-import android.graphics.BitmapFactory;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 
 public class voiceButton extends Button
 {
 	private static final int STATUS_NORMAL = 0;
 	private static final int STATUS_RECORDING = 1;
-	private static final int STATUS_END = 2;
-	private static final int STATUS_CANCEL = 3;
+	private static final int STATUS_WANT_TO_CANCEL = 2;
 	private int currentStatus = 0;
 	
 	private Context context;
-	private Dialog noticeDialog;
+	private dialogManager dm;
 	
 	private int width, height;
 	
 	private final String TAG = "test";
+	
+	private audioManager mAudioManager;
 	
 	public voiceButton(Context context)
 	{
@@ -48,6 +35,8 @@ public class voiceButton extends Button
 	{
 		super(context, attrs);
 		this.context = context;
+		dm = new dialogManager(context);
+		mAudioManager = new audioManager(context);
 	}
 
 	@Override
@@ -74,55 +63,49 @@ public class voiceButton extends Button
 		{
 			case MotionEvent.ACTION_DOWN:
 				currentStatus = STATUS_RECORDING;
-				dialogShow();
-				changeButtonStatus();
+				dm.show();
+				// 开始录音,并启动线程获取声音大小和计时
+				updateButtonStatus();
 				break;			
 			case MotionEvent.ACTION_MOVE:
 				judgeStatus(x, y);
-				changeButtonStatus();
+				dm.updateStatus(currentStatus);
+				updateButtonStatus();
 				break;
 			case MotionEvent.ACTION_UP:
-				
+				dm.dismiss();
+				// 判断是取消录音还是保存录音还是录音时间过短
+				if(currentStatus == STATUS_WANT_TO_CANCEL)
+				{
+					
+				}
+				else
+				{
+//					dm.updateStatus(3);
+				}
 				currentStatus = STATUS_NORMAL;
-				changeButtonStatus();
+				updateButtonStatus();
 				break;
 		}
 		return super.onTouchEvent(event);
 	}
 
 	
-
-	private void dialogShow()
-	{
-		// TODO Auto-generated method stub	
-//		LayoutInflater layout = LayoutInflater.from(context);
-//		View view = layout.inflate(R.layout.dialog_layout, null);
-//		noticeDialog = new AlertDialog.Builder(context, R.style.dialog).setView(view).create();
-//		noticeDialog.show();
-		noticeDialog = new Dialog(context, R.style.dialog);
-		LayoutInflater layout = LayoutInflater.from(context);
-		View view = layout.inflate(R.layout.dialog_layout, null);
-		noticeDialog.setContentView(view);
-				
-		noticeDialog.show();
-	
-	}
-
 	private void judgeStatus(int x, int y)
 	{
 		// TODO Auto-generated method stub
 		 
 		if(y > 0 && y < height && x > 0 && x < width)
 		{
-			currentStatus = STATUS_END;
+			currentStatus = STATUS_RECORDING;
 		}
 		else
 		{
-			currentStatus = STATUS_CANCEL;
+			currentStatus = STATUS_WANT_TO_CANCEL;
 		}
 	}
 
-	private void changeButtonStatus()
+	private void updateButtonStatus()
 	{
 		// TODO Auto-generated method stub
 		switch(currentStatus)
@@ -133,11 +116,8 @@ public class voiceButton extends Button
 			case STATUS_RECORDING:
 				setText("松开 结束");
 				break;
-			case STATUS_CANCEL:
+			case STATUS_WANT_TO_CANCEL:
 				setText("松开手指，取消发送");
-				break;
-			case STATUS_END:
-				setText("松开 结束");
 				break;
 		}
 	}
