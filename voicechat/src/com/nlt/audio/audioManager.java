@@ -2,8 +2,10 @@ package com.nlt.audio;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import android.media.MediaRecorder;
+import android.media.MediaRouter.VolumeCallback;
 import android.os.Environment;
 import android.util.Log;
 import android.content.Context;
@@ -12,17 +14,31 @@ public class audioManager
 {
 	private Context context;
 	private MediaRecorder mRecorder;
+	private String mDir = "/voiceChat/";
 	private File file;
 	private final String TAG = "test";
+	private boolean isRecording = false;
 	
 	public audioManager(Context context)
 	{
-		String name = "1234.raw";
-		
-			
+		this.context = context;		
+	}
+	
+	public interface AudioStatesListener
+	{
+		void wellPrepared();
+	}
+	
+	private AudioStatesListener mListener;
+	public void setOnAudioStatesListener(AudioStatesListener listener)
+	{
+		mListener = listener;
+	}
+	
+	private void init()
+	{
 		File path = Environment.getExternalStorageDirectory(); 
-		Log.e(TAG, "path: " + path);
-		file = new File(path.getPath() + "/voiceChat/1234.raw");
+		file = new File(path.getPath() + mDir + getFileName());
 		if (!file.exists())
 		{
 			File dir = new File(file.getParent());
@@ -38,23 +54,22 @@ public class audioManager
 			}
 	   	}
 		
-		Log.e(TAG, "init");
 		mRecorder = new MediaRecorder();
 		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
 		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 		mRecorder.setOutputFile(file.toString());
-		
-		
 	}
 	
 	public void record()
 	{
 		try 
 		{
+			init();
 			mRecorder.prepare();
 			mRecorder.start();
-			Log.e(TAG, "start");
+			isRecording = true;
+			mListener.wellPrepared();
 		}
         catch (IllegalStateException e) 
         {
@@ -68,8 +83,39 @@ public class audioManager
 
 	public void stop()
 	{
-		Log.e(TAG, "stop");
-		mRecorder.stop();
-		mRecorder.release();
+		if(isRecording)
+		{
+			mRecorder.stop();
+			mRecorder.release();
+			isRecording = false;
+		}
+		
 	}
+	
+	public void cancel()
+	{
+		stop();
+		if(file != null)
+			file.delete();
+	}
+
+	public int getVolumeLevel(int maxLv)
+	{
+		int lv;
+		try
+		{
+			lv = maxLv * mRecorder.getMaxAmplitude() / 32768 + 1;
+		}
+		catch(IllegalStateException e)
+		{
+			lv = 1;
+		}
+		return lv; 
+	}
+	
+	private String getFileName()
+	{
+		return UUID.randomUUID().toString() + ".amr";
+	}
+
 }

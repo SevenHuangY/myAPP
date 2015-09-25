@@ -1,8 +1,6 @@
 package com.nlt.ui;
 
-import com.nlt.audio.audioManager;
 import com.nlt.voicechat.R;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,7 +14,7 @@ public class dialogManager
 	private Dialog noticeDialog;
 	private ImageView leftImg, rightImg;
 	private TextView textInfo;
-	
+	private int resid = 0;
 	
 	public dialogManager(Context context)
 	{
@@ -50,7 +48,16 @@ public class dialogManager
 	
 	public void updateVoiceLevel(int lv)
 	{
-		
+		if(noticeDialog != null && noticeDialog.isShowing())
+		{
+			
+			leftImg.setVisibility(View.VISIBLE);
+			rightImg.setVisibility(View.VISIBLE);
+			
+			resid = context.getResources().getIdentifier("v" + lv, "drawable", context.getPackageName());
+			rightImg.setImageResource(resid);		
+			
+		}
 	}
 	
 	public void updateStatus(int status)
@@ -60,7 +67,8 @@ public class dialogManager
 			case 1: // recording
 				leftImg.setVisibility(View.VISIBLE);
 				leftImg.setImageResource(R.drawable.recorder);
-				rightImg.setImageResource(R.drawable.v1);
+				if(resid > 0)
+					rightImg.setImageResource(resid);
 				textInfo.setText("手指上滑，取消发送");
 				break;
 			case 2: //cancel
@@ -75,6 +83,4 @@ public class dialogManager
 				break;
 		}
 	}
-	
-	
 }
