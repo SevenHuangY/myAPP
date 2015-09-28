@@ -8,8 +8,16 @@ import com.nlt.ui.voiceButton;
 import com.nlt.ui.voiceButton.audioFinishListener;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.app.Activity;
+import android.graphics.drawable.AnimationDrawable;
 
 public class MainActivity extends Activity implements audioFinishListener
 {
@@ -31,6 +39,22 @@ public class MainActivity extends Activity implements audioFinishListener
 
 		mAdapter = new baseAdapter(this, mData);
 		mList.setAdapter(mAdapter);
+		mList.setOnItemClickListener(new OnItemClickListener()
+		{
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id)
+			{
+				// TODO Auto-generated method stub
+				Log.e("test", "item");
+				View im = (View) view.findViewById(R.id.voice_anim_img);
+				im.setBackgroundResource(R.anim.voice_anim);
+				AnimationDrawable anim = (AnimationDrawable) im.getBackground();
+				
+				anim.start();
+			}
+			
+		});
 	}
 
 	private void findView()

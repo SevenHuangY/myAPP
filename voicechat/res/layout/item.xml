@@ -5,16 +5,16 @@
     android:layout_marginRight="5dp"
     android:layout_marginTop="5dp" >
 
-    <ImageView
+    <View
         android:id="@+id/user_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/icon" 
-        android:contentDescription="@string/contentDescription"/>
+        android:background="@drawable/icon" 
+        />
     
-    <Button
+    <View
         android:id="@+id/voice_btn"
         android:layout_width="50dp"
         android:layout_height="30dp"
@@ -24,7 +24,7 @@
         android:background="@drawable/buttonshape"
          />
 
-    <ImageView
+    <View
         android:id="@+id/voice_anim_img"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -32,16 +32,17 @@
         android:layout_alignBottom="@+id/voice_btn"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/voice_btn"
-        android:src="@drawable/adj" 
-        android:contentDescription="@string/contentDescription"/>
+        android:background="@drawable/adj" 
+        />
 
     <TextView
         android:id="@+id/voice_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:layout_alignBaseline="@+id/voice_btn"
+        android:gravity="center"
+        android:layout_marginRight="3dp"
         android:layout_alignBottom="@+id/voice_btn"
+        android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/voice_btn"
         android:text="1" />
 
