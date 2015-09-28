@@ -5,23 +5,21 @@ import java.io.IOException;
 import java.util.UUID;
 
 import android.media.MediaRecorder;
-import android.media.MediaRouter.VolumeCallback;
 import android.os.Environment;
-import android.util.Log;
 import android.content.Context;
 
 public class audioManager
 {
-	private Context context;
+//	private Context context;
 	private MediaRecorder mRecorder;
 	private String mDir = "/voiceChat/";
 	private File file;
-	private final String TAG = "test";
+//	private final String TAG = "test";
 	private boolean isRecording = false;
 	
 	public audioManager(Context context)
 	{
-		this.context = context;		
+//		this.context = context;		
 	}
 	
 	public interface AudioStatesListener
@@ -81,7 +79,7 @@ public class audioManager
 		}
 	}
 
-	public void stop()
+	public String stop()
 	{
 		if(isRecording)
 		{
@@ -90,6 +88,7 @@ public class audioManager
 			isRecording = false;
 		}
 		
+		return file.toString();
 	}
 	
 	public void cancel()

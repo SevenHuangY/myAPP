@@ -3,14 +3,13 @@ package com.nlt.ui;
 
 import com.nlt.audio.audioManager;
 import com.nlt.audio.audioManager.AudioStatesListener;
+import com.nlt.baseStruct.audioFileStruct;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 
 public class voiceButton extends Button implements AudioStatesListener
@@ -20,12 +19,12 @@ public class voiceButton extends Button implements AudioStatesListener
 	private static final int STATUS_WANT_TO_CANCEL = 2;
 	private int currentStatus = 0;
 	
-	private Context context;
+//	private Context context;
 	private dialogManager dm;
 	
-	private int width, height;
+	private int height;
 	private boolean isRecording = false;
-	private final String TAG = "test";
+//	private final String TAG = "test";
 	private float recordTime = 0f;
 	
 	private audioManager mAudioManager;
@@ -81,13 +80,16 @@ public class voiceButton extends Button implements AudioStatesListener
 					}
 					break;
 				case DISMISS_DIALOG:				
-					dm.dismiss();			
+					dm.dismiss();	
+					dm.updateStatus(1);
 					break;
 			}		
 		}		
 	};
 	
 	private int MaxVolumeLv = 7;
+	
+	private audioFileStruct audioFile;
 	
 	public voiceButton(Context context)
 	{
@@ -98,21 +100,12 @@ public class voiceButton extends Button implements AudioStatesListener
 	public voiceButton(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		this.context = context;
+//		this.context = context;
 		dm = new dialogManager(context);
 		mAudioManager = new audioManager(context);
 		mAudioManager.setOnAudioStatesListener(this);
 		
-		setOnLongClickListener(new OnLongClickListener()
-		{		
-			@Override
-			public boolean onLongClick(View v)
-			{
-				mAudioManager.record();			
-				return true;
-			}
-		});
-	
+		
 	}
 
 	@Override
@@ -121,7 +114,7 @@ public class voiceButton extends Button implements AudioStatesListener
 		// TODO Auto-generated method stub
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		
-		width = getMeasuredWidth();
+		getMeasuredWidth();
 		height = getMeasuredHeight();
 		
 //		Log.e(TAG, "w: " + width + " h: " + height);
@@ -139,6 +132,7 @@ public class voiceButton extends Button implements AudioStatesListener
 		{
 			case MotionEvent.ACTION_DOWN:
 				currentStatus = STATUS_RECORDING;
+				mAudioManager.record();	
 				break;			
 			case MotionEvent.ACTION_MOVE:
 				judgeStatus(x, y);			
@@ -162,16 +156,19 @@ public class voiceButton extends Button implements AudioStatesListener
 					}
 					else
 					{
-						if(recordTime < 1.0f)
+						if(recordTime < 0.5f)
 						{
 							dm.updateStatus(3);
 							mHandler.sendEmptyMessageDelayed(DISMISS_DIALOG, 1000);
 							mAudioManager.cancel();
 						}
 						else
-						{
+						{	
+							audioFile = new audioFileStruct();
 							mHandler.sendEmptyMessage(DISMISS_DIALOG);
-							mAudioManager.stop();
+							audioFile.filePath = mAudioManager.stop();
+							audioFile.fileLength = (int)(recordTime + 0.5);
+							mListener.finish(audioFile);
 						}
 						
 					}					
@@ -184,6 +181,16 @@ public class voiceButton extends Button implements AudioStatesListener
 		return super.onTouchEvent(event);
 	}
 
+	public interface audioFinishListener
+	{
+		public void finish(audioFileStruct file);
+	}
+	private audioFinishListener mListener;
+	
+	public void setAudioFinishListener(audioFinishListener listener)
+	{
+		mListener = listener;
+	}
 	
 	private void reset()
 	{

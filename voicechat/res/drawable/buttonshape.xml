@@ -4,5 +4,5 @@
     <solid android:color="#ffeeeeee"/>
 	<stroke 
 	    android:width="2dp"
-	    android:color="#ffcecece"/>
+	    android:color="#ffcecece"/>	
 </shape>
