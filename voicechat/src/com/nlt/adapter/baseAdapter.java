@@ -31,7 +31,7 @@ public class baseAdapter extends BaseAdapter
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		DisplayMetrics outMetrics = new DisplayMetrics();
 		wm.getDefaultDisplay().getMetrics(outMetrics);
-		minWidth = (int) (outMetrics.widthPixels * 0.15f);
+		minWidth = (int) (outMetrics.widthPixels * 0.1f);
 		maxWidth = (int) (outMetrics.widthPixels * 0.7f);
 		
 	}

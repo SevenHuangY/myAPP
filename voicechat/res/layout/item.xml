@@ -26,9 +26,8 @@
 
     <View
         android:id="@+id/voice_anim_img"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginRight="5dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignBottom="@+id/voice_btn"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/voice_btn"
